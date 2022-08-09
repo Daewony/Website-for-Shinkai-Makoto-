@@ -1,0 +1,69 @@
+body {
+  font-family: serif;
+  font-size: 70px;
+}
+
+section {
+  border: 10px;
+  height: 90vh;
+
+  position: relative;
+}
+.container {
+  border: 10px;
+  max-width: 1200px;
+  width: 100%;
+  margin: auto;
+
+  height: 50vh;
+  display: flex; /* 뭐지? */
+  align-items: center; /* 세로 정렬 */
+  justify-content: center; /* 가로 정렬 */
+
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
+a {
+  color: #000;
+  text-decoration: none;
+}
+
+.music {
+  display: none;
+}
+
+.text {
+  outline: none;
+  font-size: auto;
+  background: linear-gradient(
+    120deg,
+    #087948 0%,
+    #41c56d 25%,
+    #a3f3ba 50%,
+    #41c56d 75%,
+    #087948 100%
+      /* 135deg,
+    #5335cf 0%,
+    #de005e 25%,
+    #f66e48 50%,
+    #de005e 75%,
+    #5335cf 100% 
+    */
+      /* 
+      background-image: linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%);
+    */
+  );
+  background-size: 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: animate 10s linear infinite;
+}
+@keyframes animate {
+  100% {
+    background-position: 400%;
+  }
+}
