@@ -1,0 +1,233 @@
+@charset 'utf-8';
+
+html {
+	font-family: 'Noto Sans KR', sans-serif;
+	font-size: 14px;
+}
+body {
+    overflow-x: hidden;   /* 스크롤 안생김 */
+    color: rgb(29,29,31);
+    letter-spacing: -0.05em; /* 자간(글자 간격) 설정 */
+    background: white;
+}
+p {
+    line-height: 1.6; /* 행간 설정 */
+}
+a {
+    color: rgb(29,29,31);
+    text-decoration: none; /* 밑줄 없애기 */
+}
+.global-nav {
+    position: absolute; /* 메뉴 공간차지 않함 */
+    top: 0;
+    left: 0;
+    width: 100%; /* position: absolute 일때는 강제로 넓혀줘야함 안하면 글자크기만큼만 차지함 */
+    padding: 0 1rem; /* 너무 화면 벽에 붙어있었음 */
+    height: 44px;
+    z-index: 10;
+}
+.local-nav {
+    position: absolute;
+    top: 45px; /* global-nav가 44px이니까 45px시작 */
+    left: 0;
+    width: 100%;
+    height: 52px;
+    padding: 0 1rem;
+    border-bottom: 1px solid #ddd; /* 아래 연한 회색깔 보더 */
+    z-index: 11;
+}
+.global-nav-link,
+.local-nav-links {
+    /* 네비가 균일한 간격으로 이루어짐 flex의 justify-contents 이용 */
+    display: flex; /* 내용물마다 한줄 차지하지 않고 가로로 배치됨 */
+    align-items: center; /* 세로 정렬 */
+    max-width: 1000px; /* width 제한 */
+    height: 100%; /* 현재 글자 크기가 아닌 부모의 크기 공간 만큼 활용, height:44px 이렇게 해도 상관없긴함 */
+    margin: 0 auto; /* 센터 정렬, 좌우 auto */
+}
+.global-nav-link {
+    justify-content: space-between;  /* 가로 배치 정렬 */
+}
+/* margin 에 auto 가 들어가면 내가 가질 수 있는 여백,margin을 확 다씀  */
+/* ex) margin: 0 auto, 오른쪽 왼쪽의 margin을 다 쓰니 가운데로 정렬됨  */
+/* 태그보다 구체적인 클래스가 우선이다. */
+.local-nav-links .product-name {
+    margin-right: auto;
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+.local-nav-links a {
+    font-size: 0.8rem;
+}
+
+/* :not(.클래스)로 제외 시킬 수 있다 */
+.local-nav-links a:not(.product-name) {
+    margin-left: 2em;
+}
+.scroll-section {
+    /* border: 3px solid red; */
+    padding-top: 50vh;
+}
+#scroll-section-0 h1 {
+    position: relative;
+    top: -10vh;
+    z-index: 5;
+    font-size: 4rem;
+    text-align: center;
+}
+/* position: sticky; IE에서 지원 못하지만 유용한 편
+    position: fixed;  */
+.main-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 35vh; /* 높이의 35% 위치 */
+    margin: 5px 0;
+    height: 3em;
+    font-size: 2.5rem;
+    opacity: 0;
+    /* background: rgba(0,0,0,0.3);  백그라운드 넣어서 구역 확인하기*/
+}
+.main-message p {
+    font-weight: bold; /* 글자 굵기 */ 
+    text-align: center; /* 글자 가운데로 정렬 */
+    line-height: 1.2; /* 글자 행간격 설정 */
+}
+.main-message small { 
+    display: block; /* 다음줄로 넘어가기 위해서 block으로함 */
+    margin-bottom: 0.5em; 
+    font-size: 1.2rem;
+}
+#scroll-section-2 .main-message {
+    font-size: 3.5rem;
+}
+
+.description {
+    /* 컨테이너를 제한하는게 아닌 안의 내용을 제한하는 것이 좋다 */
+    min-width: 1000px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    font-size: 1.2rem;
+    color:#888;
+}
+.description strong {
+    float: left;
+    margin-right: 0.2em; /* 84 x 0.2 = 8.4 */
+    font-size: 3rem; /* 84 */
+    color:rgb(29,29,31);
+}
+/* font-size는 rem, 나머지는 거의 em을 이용 */
+/* 현재 1rem = 14px, */
+.sticky-elem.desc-message {
+    width: 45%;
+    font-weight: bold;
+    opacity: 0;
+}
+.pin {
+    width: 1px;
+    height: 100px;
+    background:rgb(29,29,31);
+}
+#scroll-section-2 .b{
+    top: 10%;
+    left: 40%;
+}
+#scroll-section-2 .c{
+    top: 15%;
+    left: 45%;
+}
+.mid-message {
+    max-width: 1000px; /* 최대 너비 */
+    margin: 0 auto;
+    padding: 0 1rem; /* 벽에 붙이지 않기 위함 */
+    font-size: 2rem;
+    color:#888;
+}
+.mid-message strong {
+    color: rgb(29,29,31);
+}
+.canvas-caption {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    color:#888;
+    font-size: 1.2rem;
+    /* text-align: center; 글자 가운데 정렬 */
+}
+.footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 7rem;
+    color: white;
+    background: darkorange;
+}
+.sticky-elem {
+    display: none;
+    position: fixed;
+    left: 0;
+    width: 100%;
+}
+#show-scene-0 #scroll-section-0 .sticky-elem,
+#show-scene-1 #scroll-section-1 .sticky-elem,
+#show-scene-2 #scroll-section-2 .sticky-elem,
+#show-scene-3 #scroll-section-3 .sticky-elem {
+    display: block;
+}
+.sticky-elem-canvas {
+    top: 0;
+    height: 100%;
+    /* background: #ccc; */
+}
+.sticky-elem-canvas canvas{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+.image-blend-canvas {
+    
+}
+#scroll-section-3 {
+    display: flex; /* 기본 가로 배치 */
+    flex-direction: column; /* 세로 배치 */
+    align-items: center; /* 메인축(세로) 수직 방향 정렬 */
+}
+
+/* 1024px 이상인 경우 적용 */
+@media (min-width: 1024px) {
+    #scroll-section-0 h1 {
+        font-size: 9vw; /* 윈도우 사이즈의 9% 크기 */
+    }
+    .main-message {
+        font-size: 4vw; 
+    }
+    .description {
+        font-size: 2rem;
+    }                                                                   
+    .description strong {
+        font-size: 6rem;
+    }
+    #scroll-section-2 .main-message {
+        font-size: 6vw;
+    }
+    .main-message small {
+        font-size: 1.5vw;
+    }
+    .desc-message {
+        width: 20%;
+        font-weight: bold;
+    }
+    #scroll-section-2 .b{
+        top: 20%;
+        left: 53%;
+    }
+    #scroll-section-2 .c{
+        left: 55%;
+    }
+    .mid-message {
+        font-size: 4vw; 
+    }
+    .canvas-caption {
+        font-size: 2rem; /* html의 폰트사이즈에 늘림 */
+    }
+}
