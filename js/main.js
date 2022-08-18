@@ -124,7 +124,8 @@
                 images: [] // 이미지 객체들을 푸시해서 넣기
             },
             values: {
-
+                rect1X: [ 0, 0, { start: 0, end: 0 }], // 왼쪽 사진 가리는 기둥, 화면 크기가 달라질 수 있어서 0으로 세팅
+                rect2X: [ 0, 0, { start: 0, end: 0 }], // 오른쪽 사진 가리는 기둥
             }
         }
     ];
@@ -356,8 +357,21 @@
                 objs.canvas.style.transform = `scale(${canvasScaleRatio})`;
                 objs.context.drawImage(objs.images[0], 0, 0);
 
-                
+                // 캔버스 사이즈에 맞춰 가정한 innerWidth와 innerHeight
+                const recalculatedInnerWidth = window.innerWidth / canvasScaleRatio;
+                const recalculatedInnerHeight = window.innerHeight / canvasScaleRatio;
+                console.log(recalculatedInnerWidth, recalculatedInnerHeight);
 
+                const whiteRectWidth = recalculatedInnerWidth * 0.15;
+                // 0: 출발값, 1: 최종값
+                values.rect1X[0] = (objs.canvas.width - recalculatedInnerWidth) / 2;
+                values.rect1X[1] = values.rect1X[0] - whiteRectWidth;
+                values.rect2X[0] = values.rect1X[0] + recalculatedInnerWidth - whiteRectWidth;
+                values.rect2X[1] = values.rect2X[0] + whiteRectWidth;
+                
+                // 좌우 흰색 박스 그리기(x, y, width, height)
+                objs.context.fillRect(values.rect1X[0], 0, parseInt(whiteRectWidth), recalculatedInnerHeight);
+                objs.context.fillRect(values.rect2X[0], 0, parseInt(whiteRectWidth), recalculatedInnerHeight);
 
 
                 break;
