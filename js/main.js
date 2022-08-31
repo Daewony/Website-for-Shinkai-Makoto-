@@ -13,7 +13,10 @@
     let prevScrollHeight = 0; // 현재 스크롤 위치보다 이전에 위치한 스크롤 섹션들의 스크롤 높이값의 합
     let currentScene = 0; // 현재 눈 앞에 보고 있는 씬
     let enterNewScene = false; // 새로운 scene이 시작된 순간 true
-
+    let acc = 0.1; // 애니메이션 가속도
+    let delayedYOffset = 0; //
+    let rafId; 
+    let rafState; // 애니메이션 정지 관련
 
     const sceneInfo = [
         {
@@ -163,7 +166,7 @@
         // console.log(sceneInfo[3].objs.images);
 
     }
-    setCanvasImages();
+    
 
     function checkMenu() {
         if (yOffset > 44) {
@@ -249,11 +252,11 @@
         switch (currentScene) {
             case 0:
                 // console.log('0 play');
-
-                let sequence = Math.round(calcValues(values.imageSequence, currentYOffset));
+                
+                // let sequence = Math.round(calcValues(values.imageSequence, currentYOffset));
                 // console.log(sequence);
                 // canvas 그리기 = context 이용
-                objs.context.drawImage(objs.videoImages[sequence], 0, 0); // 이미지 객체, x:0, y:0 ,width, height 에 그려라, 캔버스 크기 = 이미지 크기 따라서 생략함
+                // objs.context.drawImage(objs.videoImages[sequence], 0, 0); // 이미지 객체, x:0, y:0 ,width, height 에 그려라, 캔버스 크기 = 이미지 크기 따라서 생략함
                 objs.canvas.style.opacity = calcValues(values.canvas_opacity, currentYOffset);
 
                 if (scrollRatio <= 0.22) {
@@ -307,8 +310,8 @@
                 break;
             case 2:
                 // console.log('2 play');
-                let sequence2 = Math.round(calcValues(values.imageSequence, currentYOffset));
-                objs.context.drawImage(objs.videoImages[sequence2], 0, 0);  
+                // let sequence2 = Math.round(calcValues(values.imageSequence, currentYOffset));
+                // objs.context.drawImage(objs.videoImages[sequence2], 0, 0);  
 
                 if (scrollRatio <= 0.5) {
                     // in
@@ -506,12 +509,12 @@
         }
         // console.log(prevScrollHeight);
 
-        if (yOffset > prevScrollHeight + sceneInfo[currentScene].scrollHeight) {
+        if (delayedYOffset > prevScrollHeight + sceneInfo[currentScene].scrollHeight) {
             enterNewScene = true;
             currentScene++;
             document.body.setAttribute('id', `show-scene-${currentScene}`);
         }
-        if (yOffset < prevScrollHeight ) {
+        if (delayedYOffset < prevScrollHeight ) {
             enterNewScene = true;
             if(currentScene === 0) return; // 브라우저 바운스 효과로 인해 마이너스가 되는 것 방지(모바일)
             currentScene--;
@@ -524,10 +527,42 @@
         playAnimation();
     }
 
+    function loop() {
+        delayedYOffset = delayedYOffset + (yOffset - delayedYOffset) * acc;
+
+        if(!enterNewScene){
+            if(currentScene === 0 || currentScene === 2) {
+                const currentYOffset = delayedYOffset-prevScrollHeight;
+                const objs = sceneInfo[currentScene].objs;
+                const values = sceneInfo[currentScene].values;
+                // console.log('loop');
+                let sequence = Math.round(calcValues(values.imageSequence, currentYOffset));
+                if(objs.videoImages[sequence]) { // 사진이 존재하면 실행
+                    objs.context.drawImage(objs.videoImages[sequence], 0, 0);
+                }
+            }
+        }
+        
+        
+        rafId = requestAnimationFrame(loop);
+        
+
+        if(Math.abs(yOffset - delayedYOffset) < 1) {
+            cancelAnimationFrame(rafId);
+            rafState = false;
+        }
+
+    }
+
     window.addEventListener('scroll',() => {
         yOffset = window.pageYOffset; // 편하게 쓰기 위해 변수 선언
         scrollLoop();
         checkMenu();
+
+        if(!rafState) {
+            rafId = requestAnimationFrame(loop);
+            rafState = true;
+        }
     });
     window.addEventListener('load', () => {
         setLayout();
@@ -537,7 +572,14 @@
     // DOMContentLoaded : html의 DOM 구조만 로드가 끝나면 바로 실행됨
     // 그래서 load 보다 DOMContentLoaded가 빠름
     // 하지만 지금 만드는 웹사이트는 이미지, 리소스가 있어야 의미있으므로 load 사용함
-    window.addEventListener('resize',setLayout);
+    window.addEventListener('resize', () => {
+        if(window.innerWidth > 900) {
+            setLayout();
+        }
+        sceneInfo[3].values.rectStartY = 0;
+    });
+    window.addEventListener('orientationchange', setLayout); // 모바일 회전할때 작동
     
+    setCanvasImages();
 })();
 // => 위랑 같음 (function() {})();
