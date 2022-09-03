@@ -556,9 +556,34 @@
 
     
     window.addEventListener('load', () => { // 로드가 된 후
+
+        // debugger;
+
+        setLayout();
         document.body.classList.remove('before-load');
         setLayout();
         sceneInfo[0].objs.context.drawImage(sceneInfo[0].objs.videoImages[0], 0, 0);
+
+        // setTimeout(() => {
+        //     window.scrollTo(0, 200);
+        // }, 1000);
+
+        let tempYOffset = yOffset;
+        let tempScrollCount = 0;
+        if (tempYOffset > 0) {
+            let siId = setInterval(() => {
+                scrollTo(0, tempYOffset);
+                tempYOffset += 5;
+
+                if (tempScrollCount > 20) {
+                    clearInterval(siId);
+                }
+                tempScrollCount++;
+            }, 20);
+        }
+
+
+
 
         window.addEventListener('scroll',() => {
             yOffset = window.pageYOffset; // 편하게 쓰기 위해 변수 선언
@@ -573,12 +598,18 @@
 
         window.addEventListener('resize', () => {
             if(window.innerWidth > 900) {
-                setLayout();
+                // setLayout();
+                window.location.reload();
             }
-            sceneInfo[3].values.rectStartY = 0;
+            // sceneInfo[3].values.rectStartY = 0;
         });
 
-        window.addEventListener('orientationchange', setLayout); // 모바일 회전할때 작동
+        window.addEventListener('orientationchange', () => { // orientationchange 오류, 한템포 느리게 실행
+            scrollTo(0,0);
+            setTimeout(() => {
+                window.location.reload();
+            }, 500); // 0.5초 후 작동
+        }); // 모바일 회전할때 작동
 
         document.querySelector('.loading').addEventListener('transitionend', (e) => { // transition 이벤트가 끝날때 삭제
             document.body.removeChild(e.currentTarget);
